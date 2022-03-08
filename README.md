@@ -3,7 +3,7 @@ This is a simple code to be used in terminal to simplify attendance roaster chec
 
 [[toc]]
 
-## 1. Installation
+# 1. Installation
 Do these **only for the first time**:
 1. Install python 3.6+ (tested on 3.9)
     - Install by [Anaconda](https://www.anaconda.com/products/individual)
@@ -14,18 +14,18 @@ Do these **only for the first time**:
 Do this **regularly**:
 1. ``$ git pull``
 
-## 2. Dependence
+# 2. Dependence
 Tested on MBP 14" [2021, macOS 12.2.1, M1Pro(6P+2E/G16c/N16c/32G)]
 * Python 3.9
 * pandas 1.4.1
 * Other modules: ``argparse``, ``os``, ``pathlib``
 
-## 3. Usage
+# 3. Usage
 1. **Download the .xlsx file** (ETL -> Classroom -> Zoom session participants list).
     * See the last 2 pages of [this manual](http://etl.snu.ac.kr/local/ubion/manual/contents/ko/manual_f/10.ZoomManage.pdf) (Korean).
 2. **Run python code** as described below.
 
-### 3-1. Basics
+## 3-1. Basics
 ```sh
 $ python attchk.py inputfile.xlsx [-o output] [-m minutestotal default=75] [-p percentfull default=70]
 ```
@@ -35,7 +35,7 @@ To see the full help manual:
 $ python attchk.py -h
 ```
 
-### 3-2. Example
+## 3-2. Example
 Let me explain what is calculated in the code, by looking into an example.
 
 The test input file looks like this:
@@ -97,17 +97,17 @@ for each student:
 * For detailed explanation, see below.
 
 
-#### As a video
+### As a video
 ![](example02.gif)
 
 
-### 3-3. Details
+## 3-3. Details
 For debugging purposes, the **output file** contains the full information of "Join time", "Leave time", and "Duration" information, so that the TA can check if there was any unexpected bug/error in the code. This maybe necessary if a student claims about their attendance score...
 
 ![](example01.jpg)
 ^ You can see "홍길동" has multiple Join/Leave times, as multiple rows are merged. Earliest/Latest times are also recorded for reference.
 
-#### NOTES
+### NOTES
 * `!!! ETL FAILED !!!`: For some reason, ETL cannot find who they are (within the ETL system). TAs must check those by themselves.
 * The two rows of `황황황` **are not** combined into one, because they're different people (see ID number).
 * Same for `강강강`.
@@ -117,7 +117,7 @@ For debugging purposes, the **output file** contains the full information of "Jo
 
 
 
-## 4. License & Credit
+# 4. License & Credit
 * BSD-3 (see [LICENSE](LICENSE))
 * made by Yoonsoo P. Bach in 2022 March
 * Prepared for TA works ("Extraterrestrial Planets and Life", Prof. Masateru Ishiguro) as a **학문후속세대**.
