@@ -24,13 +24,10 @@ Tested on MBP 14" [2021, macOS 12.2.1, M1Pro(6P+2E/G16c/N16c/32G)]
 
 ### 3-1. Basics
 ```sh
-$ python attchk.py inputfile.xlsx [-o output] [-t totalminutes] [-f fullpercent]
+$ python attchk.py inputfile.xlsx [-o output] [-m minutestotal default=75] [-p percentfull default=70]
 ```
-* `output`: Optional. If not given, saving to CWD, using the same name as input but extension is changed to `.csv`.
-* `totalminutes`: Total minutes of the class, time for 100% participation. Default = 75 [min]
-* `fullpercent`: Minimum % of time to be regarded as "full participation". Default = 70 [%]
 
-To see the full help manual
+To see the full help manual:
 ```sh
 $ python attchk.py -h
 ```
@@ -58,11 +55,11 @@ ID number	Name	Email address	Join time	Leave time	Duration
 
 Running the python code:
 ```sh
-$ python attchk.py testfile-zoom_participants_93522834467.xlsx -t 75 -f 70
+$ python attchk.py testfile-zoom_participants_93522834467.xlsx -m 75 -p 70
 ```
 ```sh
 # output result printed to terminal
-Namespace(input='testfile-zoom_participants_93522834467.xlsx', output=None, totalminutes=75.0, fullpercent=70.0)
+Namespace(input='testfile-zoom_participants_93522834467.xlsx', output=None, minutestotal=75.0, percentfull=70.0)
 
 
  Full? |  ID number |  Minutes   | Percent | Name
@@ -88,8 +85,8 @@ fullpercent = args.fullpercent    # 70 in this example
 
 for each student:
     Minutes = sum("Duration" values from input file)
-    Percent = Minutes/totalminutes * 100
-    Full_participation = (Percent >= fullpercent)
+    Percent = Minutes/minutestotal * 100
+    Full_participation = (Percent >= percentfull)
 ```
 
 * ``Full? == True`` : Those who participated for more than 70% * 75 minutes.
