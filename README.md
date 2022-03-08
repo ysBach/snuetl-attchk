@@ -80,8 +80,8 @@ Namespace(input='testfile-zoom_participants_93522834467.xlsx', output=None, minu
 
 The columns are calculated by:
 ```python
-totalminutes = args.totalminutes  # 75 in this example
-fullpercent = args.fullpercent    # 70 in this example
+minutestotal = args.minutestotal  # 75 in this example
+percentfull = args.percentfull    # 70 in this example
 
 for each student:
     Minutes = sum("Duration" values from input file)
