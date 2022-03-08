@@ -1,18 +1,28 @@
 # snuetl-attchk
 This is a simple code to be used in terminal to simplify attendance roaster checking for TAs at SNU, S. Korea.
 
-## Installation
+## 1. Installation
+Do these **only for the first time**:
 1. Install python 3.6+ (tested on 3.9)
     - Install by [Anaconda](https://www.anaconda.com/products/individual)
     - Restard the terminal
     - Make sure that `$ which python` returns something like `/Users/ysbach/opt/anaconda3/bin/python` (i.e., using anaconda's python).
 2. Clone this repo (click `code` button)
 
-## Usage
+Do this **regularly**:
+1. ``$ git pull``
+
+## 2. Dependence
+Tested on MBP 14" [2021, macOS 12.2.1, M1Pro(6P+2E/G16c/N16c/32G)]
+* Python 3.9
+* pandas 1.4.1
+* Other modules: ``argparse``, ``os``, ``pathlib``
+
+## 3. Usage
 1. **Download the .xlsx file** (ETL -> Classroom -> Zoom session participants list).
 2. **Run python code** as described below.
 
-### Basics
+### 3-1. Basics
 ```sh
 $ python attchk.py inputfile.xlsx [-o output] [-t totalminutes] [-f fullpercent]
 ```
@@ -25,7 +35,7 @@ To see the full help manual
 $ python attchk.py -h
 ```
 
-### Example
+### 3-2. Example
 Let me explain what is calculated in the code, by looking into an example.
 
 The test input file looks like this:
@@ -84,18 +94,24 @@ for each student:
 
 * ``Full? == True`` : Those who participated for more than 70% * 75 minutes.
 * ``Full? == False`` : TA may regard them as "absent" or "late" depending on their criteria.
-* `!!! ETL FAILED !!!`: For some reason, ETL cannot find who they are (within the ETL system). TAs must check those by themselves.
-* The two rows of `황황황` **are not** combined into one, because they're different people (see ID number).
-* Same for `강강강`.
-* The two rows of `홍길동(20**...)` **are** combined into one, because it's from the same person (from the given information).
+* For detailed explanation, see below.
 
-### Output File
+
+### 3-3. Details
 For debugging purposes, the **output file** contains the full information of "Join time", "Leave time", and "Duration" information, so that the TA can check if there was any unexpected bug/error in the code. This maybe necessary if a student claims about their attendance score...
 
 ![](example01.jpg)
 ^ You can see "홍길동" has multiple Join/Leave times, as multiple rows are merged. Earliest/Latest times are also recorded for reference.
 
+#### NOTES
+* `!!! ETL FAILED !!!`: For some reason, ETL cannot find who they are (within the ETL system). TAs must check those by themselves.
+* The two rows of `황황황` **are not** combined into one, because they're different people (see ID number).
+* Same for `강강강`.
+* The two rows of `홍길동(20**...)` **are** combined into one, because it's from the same person (from the given information).
+* Even though we set class time is 75 min, Zoom class can last longer than that (e.g., 80 min). Thus, sometimes "Percent" can get larger than 100%.
+    * Lecturer may join the Zoom room much earlier than the class starts and leave the room much later than the class ends, so `totalminutes = max(Duration)` is not a reasonable choice.
 
 
-## License
+
+## 4. License
 BSD-3 (see [LICENSE](LICENSE)), made by Yoonsoo P. Bach in 2022 March, for TA works in "Extraterrestrial Planets and Life" as a 학문후속세대.
