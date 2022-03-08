@@ -97,6 +97,10 @@ for each student:
 * For detailed explanation, see below.
 
 
+#### As a video
+![](example02.gif)
+
+
 ### 3-3. Details
 For debugging purposes, the **output file** contains the full information of "Join time", "Leave time", and "Duration" information, so that the TA can check if there was any unexpected bug/error in the code. This maybe necessary if a student claims about their attendance score...
 
