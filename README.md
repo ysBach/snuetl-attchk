@@ -1,6 +1,8 @@
 # snuetl-attchk
 This is a simple code to be used in terminal to simplify attendance roaster checking for TAs at SNU, S. Korea.
 
+[[toc]]
+
 ## 1. Installation
 Do these **only for the first time**:
 1. Install python 3.6+ (tested on 3.9)
@@ -20,6 +22,7 @@ Tested on MBP 14" [2021, macOS 12.2.1, M1Pro(6P+2E/G16c/N16c/32G)]
 
 ## 3. Usage
 1. **Download the .xlsx file** (ETL -> Classroom -> Zoom session participants list).
+    * See the last 2 pages of [this manual](http://etl.snu.ac.kr/local/ubion/manual/contents/ko/manual_f/10.ZoomManage.pdf) (Korean).
 2. **Run python code** as described below.
 
 ### 3-1. Basics
