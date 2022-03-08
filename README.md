@@ -90,7 +90,7 @@ for each student:
 ```
 
 * ``Full? == True`` : Those who participated for more than 70% * 75 minutes.
-* ``Full? == False`` : TA may regard them as "absent" or "late" depending on their criteria.
+* ``Full? == False`` : TA may **give penalty** depending on their criteria.
 * For detailed explanation, see below.
 
 
