@@ -114,5 +114,7 @@ For debugging purposes, the **output file** contains the full information of "Jo
 
 
 
-## 4. License
-BSD-3 (see [LICENSE](LICENSE)), made by Yoonsoo P. Bach in 2022 March, for TA works in "Extraterrestrial Planets and Life" as a 학문후속세대.
+## 4. License & Credit
+* BSD-3 (see [LICENSE](LICENSE))
+* made by Yoonsoo P. Bach in 2022 March
+* Prepared for TA works ("Extraterrestrial Planets and Life", Prof. Masateru Ishiguro) as a **학문후속세대**.
