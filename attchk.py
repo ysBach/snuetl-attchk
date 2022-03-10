@@ -4,8 +4,13 @@ BSD 3-Clause License
 ysBach 2022
 """
 
+import numpy as np
 import pandas as pd
 import argparse
+
+
+def calc_duration(join_time, leave_time):
+    hms = join_time.split("")
 
 p = argparse.ArgumentParser(
     description=(
@@ -34,18 +39,30 @@ p.add_argument('-p', '--percentfull', default=70, type=float,
                help=('Minimum %% of time to be regarded as "full participation". '
                      + 'Default = 70[%%]'))
 args = p.parse_args()
-print(args)
+print("\n", args)
 
 fpath = args.input
 fulltime = args.minutestotal
 fullperc = args.percentfull
 output = args.output
 
-df = pd.read_excel(fpath)
+# -- For Testing --
+# fpath = "testfile-zoom_participants_93522834467.xlsx"
+# fpath = "~/Downloads/zoom_participants_99711167427.xlsx"
+# fulltime = 75
+# fullperc = 66.67
+# output = None
 
-hms = df["Duration"].str.split(":", expand=True)
-minutes = hms[0].astype(int) * 60 + hms[1].astype(int) + hms[2].astype(int)/60
-df["Minutes"] = minutes.apply(lambda x: round(x, 2))
+df = pd.read_excel(fpath)
+# ---------------------------------------------------------------------------------------- #
+
+df["_join"] = df["Join time"].apply(lambda x: pd.to_datetime(x).value/10**9/60)
+df["_left"] = df["Leave time"].apply(lambda x: pd.to_datetime(x).value/10**9/60)
+df.sort_values("_join", inplace=True, ignore_index=True)
+
+# hms = df["Duration"].str.split(":", expand=True)
+# minutes = hms[0].astype(int) * 60 + hms[1].astype(int) + hms[2].astype(int)/60
+# df["Minutes"] = minutes.apply(lambda x: round(x, 2))
 
 # Use all info, because using only one of these will result in a non-unique ID.
 dfg = df.groupby(["ID number", "Name", "Email address"], dropna=False)
@@ -59,21 +76,38 @@ dict4df = {k: [] for k in ["Full participation",
                            "Join time", "Leave time", "Duration"]}
 
 for (idnum, name, email), df_g in dfg:
+    name = name.replace("(참여자정보 부족 : ETL 내 일치 수강생 못 찾음)", " !!! ETL FAILED !!!")
+
     dict4df["ID number"].append(idnum)
-    dict4df["Name"].append(name.replace("(참여자정보 부족 : ETL 내 일치 수강생 못 찾음)", " !!! ETL FAILED !!!"))
+    dict4df["Name"].append(name)
     dict4df["Email address"].append(email)
+
+    if len(df_g) > 1:  # 2 or more rows (multiple connections) - calculate time manually
+        _js = [df_g.iloc[0]["_join"]]
+        _ls = [df_g.iloc[0]["_left"]]
+        for i, row in df_g.iloc[1:].iterrows():
+            if row["_join"] < _ls[-1]:
+                _ls[-1] = max(_ls[-1], row["_left"])
+            else:
+                _js.append(row["_join"])
+                _ls.append(row["_left"])
+        mins = np.sum(np.array(_ls) - np.array(_js))
+    else:  # single connection - Use "Duration" value from ETL
+        hms = df_g.iloc[0]["Duration"].split(":")
+        mins = int(hms[0]) * 60 + int(hms[1]) + int(hms[2])/60
+
     for k in ["Join time", "Leave time", "Duration"]:
         dict4df[k].append(str(df_g[k].tolist()))
     dict4df["Earliest join time"].append(str(df_g["Join time"].min()))
     dict4df["Latest leave time"].append(str(df_g["Leave time"].max()))
-    mins = df_g["Minutes"].sum()
     perc = mins/fulltime*100
     dict4df["Minutes"].append("{:.2f}".format(mins, 2))
     dict4df["Percent"].append("{:.1f}".format(perc, 1))
     dict4df["Full participation"].append(perc >= fullperc)
 
 df2 = pd.DataFrame.from_dict(dict4df)
-df2.sort_values(["Full participation", "ID number", "Name", "Join time"], inplace=True, ignore_index=True)
+df2.sort_values(["Full participation", "ID number", "Name", "Join time"],
+                inplace=True, ignore_index=True)
 
 if output is None:
     from pathlib import Path
